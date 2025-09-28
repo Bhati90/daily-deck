@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://daily-deck.vercel.app/' });
-
+const API = axios.create({ baseURL: 'https://daily-deck.onrender.com/'
+ });
+// const API = axios.create({ baseURL: 'http://localhost:5000'
+//  });
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('token')) {
         req.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;

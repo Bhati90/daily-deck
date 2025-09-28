@@ -10,7 +10,7 @@ export const Chess = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white">
       <h1 className="text-4xl font-bold mb-4 text-primary">Chess</h1>
       <div className="text-2xl mb-4">It's {turn === 'w' ? 'White' : 'Black'}'s turn</div>
         <div className="w-96 h-96 bg-gray-500 grid grid-cols-8 grid-rows-8">

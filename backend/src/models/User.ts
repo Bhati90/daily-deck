@@ -1,12 +1,15 @@
-import mongoose, { Model, Document } from 'mongoose';
+// src/models/User.ts
+
+import mongoose, { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 // 1. Create an interface representing a document in MongoDB.
 export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId; // <-- ADD THIS LINE
+  _id: mongoose.Types.ObjectId;
   username: string;
   password: string;
   streak: number;
+  points: number; // <-- ADD THIS LINE
   lastQuizTakenAt?: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
@@ -16,6 +19,7 @@ const userSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   streak: { type: Number, default: 0 },
+  points: { type: Number, default: 0 }, // <-- ADD THIS LINE
   lastQuizTakenAt: { type: Date },
 }, { timestamps: true });
 

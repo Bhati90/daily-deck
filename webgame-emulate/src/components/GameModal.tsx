@@ -23,8 +23,8 @@ export const GameModal = ({ game, isOpen, onClose }: GameModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent 
-        className={`p-0 border-0 bg-transparent shadow-none max-w-none ${
+      <DialogContent
+        className={`p-0 border-0 bg-transparent shadow-none max-w-none flex flex-col ${ // <-- CHANGE IS HERE
           isFullscreen ? 'h-screen w-screen' : 'max-w-4xl w-full h-[80vh]'
         }`}
       >

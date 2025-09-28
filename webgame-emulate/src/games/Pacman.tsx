@@ -68,7 +68,7 @@ export const PacmanGame = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white">
       <h1 className="text-4xl font-bold mb-2 text-primary">Pac-Man</h1>
       <div className="mb-4">Score: {score}</div>
       <canvas ref={canvasRef} width="400" height="400" className="bg-black rounded-lg shadow-xl" />

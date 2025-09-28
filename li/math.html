@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeyondScool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logo-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #4f46e5;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .language-btn:hover {
+            background: #3730a3;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 120px;
+            display: none;
+            z-index: 1001;
+        }
+
+        .language-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .language-dropdown a {
+            display: block;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s ease;
+        }
+
+        .language-dropdown a:hover {
+            background: #f3f4f6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            display: block;
+        }
+
+        .landing-page.hidden {
+            display: none;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .explore-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .explore-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 3rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-group {
+            text-align: center;
+        }
+
+        .filter-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:hover {
+            border-color: #4f46e5;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .explore-btn {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #4f46e5, #3730a3);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .most-viewed-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .most-viewed-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 5px solid #4f46e5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .content-card h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: #6b7280;
+        }
+
+        /* Math Library Styles */
+        .math-library {
+            display: none;
+        }
+
+        .math-library.show {
+            display: block;
+        }
+
+        /* Subtopic Detail Page Styles */
+        .subtopic-detail {
+            display: none;
+        }
+
+        .subtopic-detail.show {
+            display: block;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .topics-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .topic-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .topic-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .topic-content {
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .topic-content.show {
+            display: block;
+        }
+
+        .subtopics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .subtopic {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #4f46e5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subtopic:hover {
+            background: #e0e7ff;
+            transform: translateX(5px);
+        }
+
+        .subtopic h4 {
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtopic p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .activity-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .activity-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .notes-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .video-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .practice-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .quiz-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .activity-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .activity-btn .icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ef4444;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .practice-problem {
+            background: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .quiz-question {
+            background: #fef3c7;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .video-placeholder {
+            background: #1f2937;
+            border-radius: 10px;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            margin: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .explore-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .topic-card {
+                padding: 1.5rem;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/log.jpg" alt="BeyondScool Logo">
+            <span class="logo-name">BeyondScool</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" data-translate="nav.home" class="active" onclick="showLandingPage()">Home</a></li>
+            <li><a href="#" data-translate="nav.library" onclick="showLandingPage()">Library</a></li>
+            <li><a href="#" data-translate="nav.quiz">Play Quiz</a></li>
+            <li><a href="#" data-translate="nav.games">Play Games</a></li>
+        </ul>
+        <div class="language-selector">
+            <button class="language-btn" onclick="toggleLanguageDropdown()">🌐 English</button>
+            <div class="language-dropdown" id="languageDropdown">
+                <a href="#" onclick="changeLanguage('en')">🇺🇸 English</a>
+                <a href="#" onclick="changeLanguage('es')">🇪🇸 Español</a>
+                <a href="#" onclick="changeLanguage('fr')">🇫🇷 Français</a>
+                <a href="#" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+                <a href="#" onclick="changeLanguage('hi')">🇮🇳 हिंदी</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Landing Page -->
+        <div class="landing-page" id="landingPage">
+            <div class="hero-section">
+                <h1 data-translate="hero.title">Explore</h1>
+                <p data-translate="hero.subtitle">Discover comprehensive learning materials tailored to your needs</p>
+            </div>
+
+            <div class="explore-section">
+                <h2 class="explore-title" data-translate="explore.title">Explore</h2>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label" data-translate="filters.grade">Grade</label>
+                        <select class="filter-select" id="gradeSelect">
+                            <option value="" data-translate="filters.selectGrade">Select grade</option>
+                            <option value="grade1" data-translate="filters.grade1">Grade 1</option>
+                            <option value="grade2" data-translate="filters.grade2">Grade 2</option>
+                            <option value="grade3" data-translate="filters.grade3">Grade 3</option>
+                            <option value="grade4" data-translate="filters.grade4">Grade 4</option>
+                            <option value="grade5" data-translate="filters.grade5">Grade 5</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label" data-translate="filters.subject">Subject</label>
+                        <select class="filter-select" id="subjectSelect">
+                            <option value="" data-translate="filters.selectSubject">Select subject</option>
+                            <option value="mathematics" data-translate="filters.mathematics">Mathematics</option>
+                            <option value="science" data-translate="filters.science">Science</option>
+                            <option value="english" data-translate="filters.english">English</option>
+                            <option value="history" data-translate="filters.history">History</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label" data-translate="filters.exam">Exam You Are Preparing For</label>
+                        <select class="filter-select" id="examSelect">
+                            <option value="" data-translate="filters.selectExam">Select exam</option>
+                            <option value="final" data-translate="filters.finalExam">Final Exam</option>
+                            <option value="midterm" data-translate="filters.midtermExam">Midterm Exam</option>
+                            <option value="quiz" data-translate="filters.weeklyQuiz">Weekly Quiz</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label" data-translate="filters.board">Education Board</label>
+                        <select class="filter-select" id="boardSelect">
+                            <option value="" data-translate="filters.selectBoard">Select board</option>
+                            <option value="ib" data-translate="filters.ibBoard">IB Board</option>
+                            <option value="cbse" data-translate="filters.cbseBoard">CBSE Board</option>
+                            <option value="icse" data-translate="filters.icseBoard">ICSE Board</option>
+                            <option value="state" data-translate="filters.stateBoard">State Board</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="explore-btn" data-translate="explore.button" onclick="exploreContent()">Explore</button>
+            </div>
+
+            <div class="most-viewed-section">
+                <h2 class="most-viewed-title" data-translate="mostViewed.title">Our Most Viewed Contents</h2>
+                <div class="content-grid">
+                    <div class="content-card" onclick="openDirectContent('grade4-math')">
+                        <h3 data-translate="mostViewed.grade4Math">Grade 4 - Mathematics</h3>
+                        <p data-translate="mostViewed.grade4MathDesc">Complete math curriculum for Grade 4 students</p>
+                    </div>
+                    <div class="content-card">
+                        <h3 data-translate="mostViewed.grade3Science">Grade 3 - Science</h3>
+                        <p data-translate="mostViewed.grade3ScienceDesc">Interactive science lessons and experiments</p>
+                    </div>
+                    <div class="content-card">
+                        <h3 data-translate="mostViewed.grade5English">Grade 5 - English</h3>
+                        <p data-translate="mostViewed.grade5EnglishDesc">Reading, writing, and grammar exercises</p>
+                    </div>
+                    <div class="content-card">
+                        <h3 data-translate="mostViewed.grade2Math">Grade 2 - Mathematics</h3>
+                        <p data-translate="mostViewed.grade2MathDesc">Foundation math concepts for young learners</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Math Library Page -->
+        <div class="math-library" id="mathLibrary">
+            <button class="back-btn" onclick="showLandingPage()" data-translate="back">← Back to Explore</button>
+            
+            <div class="header">
+                <h1 data-translate="math.title">Grade 4 - Mathematics (IB Board)</h1>
+                <p data-translate="math.subtitle">Comprehensive math topics with interactive learning</p>
+            </div>
+
+            <div class="topics-grid">
+                <!-- Numbers & Operations -->
+                <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic('numbers')">
+                        <span class="topic-icon">🔢</span>
+                        <h2 class="topic-title" data-translate="topics.numbers.title">Numbers & Operations</h2>
+                    </div>
+                    <div class="topic-content" id="numbers">
+                        <div class="subtopics">
+                            <div class="subtopic" onclick="openSubtopicDetail('Place Value', 'Place Value (6-7 digits)', 'Understanding place value up to millions')">
+                                <h4 data-translate="topics.numbers.placeValue">Place Value (6-7 digits)</h4>
+                                <p data-translate="topics.numbers.placeValueDesc">Understanding place value up to millions</p>
+                            </div>
+                            <div class="subtopic" onclick="openSubtopicDetail('Large Numbers', 'Reading & Writing Large Numbers', 'Comparing and ordering large numbers')">
+                                <h4 data-translate="topics.numbers.largeNumbers">Reading & Writing Large Numbers</h4>
+                                <p data-translate="topics.numbers.largeNumbersDesc">Comparing and ordering large numbers</p>
+                            </div>
+                            <div class="subtopic" onclick="openSubtopicDetail('Rounding', 'Rounding Numbers', 'Rounding to nearest 10, 100, 1000')">
+                                <h4 data-translate="topics.numbers.rounding">Rounding Numbers</h4>
+                                <p data-translate="topics.numbers.roundingDesc">Rounding to nearest 10, 100, 1000</p>
+                            </div>
+                            <div class="subtopic" onclick="openSubtopicDetail('Roman Numerals', 'Roman Numerals', 'Understanding Roman numeral system')">
+                                <h4 data-translate="topics.numbers.roman">Roman Numerals</h4>
+                                <p data-translate="topics.numbers.romanDesc">Understanding Roman numeral system</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other topics remain the same structure -->
+                <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic('measurement')">
+                        <span class="topic-icon">📏</span>
+                        <h2 class="topic-title">Measurement</h2>
+                    </div>
+                    <div class="topic-content" id="measurement">
+                        <div class="subtopics">
+                            <div class="subtopic" onclick="openSubtopicDetail('Length Weight Volume', 'Length, Weight & Volume', 'Metric and customary units')">
+                                <h4>Length, Weight & Volume</h4>
+                                <p>Metric and customary units</p>
+                            </div>
+                            <div class="subtopic" onclick="openSubtopicDetail('Unit Conversion', 'Unit Conversion', 'Converting between units')">
+                                <h4>Unit Conversion</h4>
+                                <p>Converting between units</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add other topics similarly -->
+            </div>
+        </div>
+
+        <!-- Subtopic Detail Page -->
+        <div class="subtopic-detail" id="subtopicDetail">
+            <button class="back-btn" onclick="showMathLibrary()">← Back to Topics</button>
+            
+            <div class="header">
+                <h1 id="subtopicTitle">Subtopic Title</h1>
+                <p id="subtopicDescription">Subtopic description</p>
+            </div>
+
+            <div class="activity-buttons">
+                <a href="#" class="activity-btn notes-btn" onclick="openModal('notes')">
+                    <span class="icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="#" class="activity-btn video-btn" onclick="openModal('video')">
+                    <span class="icon">🎥</span>
+                    <span>Video</span>
+                </a>
+                <a href="#" class="activity-btn practice-btn" onclick="openModal('practice')">
+                    <span class="icon">✅</span>
+                    <span>Practice</span>
+                </a>
+                <a href="#" class="activity-btn quiz-btn" onclick="openModal('quiz')">
+                    <span class="icon">🏆</span>
+                    <span>Quiz</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="activityModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Activity Title</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current subtopic data
+        let currentSubtopic = {};
+
+        // Content data organized by subtopic
+        const subtopicContent = {
+            'Place Value': {
+                notes: {
+                    title: 'Place Value - Study Notes',
+                    content: `
+                        <h3>🔢 Place Value System</h3>
+                        <p><strong>Understanding place value up to 6-7 digits:</strong></p>
+                        <div class="practice-problem">
+                            <p>Example: In the number 3,456,789</p>
+                            <ul>
+                                <li>3 is in the millions place (3,000,000)</li>
+                                <li>4 is in the hundred thousands place (400,000)</li>
+                                <li>5 is in the ten thousands place (50,000)</li>
+                                <li>6 is in the thousands place (6,000)</li>
+                                <li>7 is in the hundreds place (700)</li>
+                                <li>8 is in the tens place (80)</li>
+                                <li>9 is in the ones place (9)</li>
+                            </ul>
+                        </div>
+                        <div class="practice-problem">
+                            <h4>Key Points:</h4>
+                            <ul>
+                                <li>Each digit has a specific value based on its position</li>
+                                <li>Moving left increases the place value by 10 times</li>
+                                <li>Use place value charts to visualize numbers</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Place Value - Video Lesson',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Understanding Place Value</h3>
+                            <p>Duration: 12 minutes</p>
+                            <p>This video covers:</p>
+                            <ul>
+                                <li>Place value chart explanation</li>
+                                <li>Identifying place values in large numbers</li>
+                                <li>Expanded form and standard form</li>
+                                <li>Interactive examples and practice</li>
+                            </ul>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Place Value - Practice Problems',
+                    content: `
+                        <h3>🧮 Practice Problems</h3>
+                        
+                        <div class="practice-problem">
+                            <h4>Problem 1: Identify Place Value</h4>
+                            <p>What is the value of the digit 7 in the number 2,735,846?</p>
+                            <p><strong>Answer:</strong> 700,000 (seven hundred thousand)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 2: Expanded Form</h4>
+                            <p>Write 456,783 in expanded form.</p>
+                            <p><strong>Answer:</strong> 400,000 + 50,000 + 6,000 + 700 + 80 + 3</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 3: Standard Form</h4>
+                            <p>Write in standard form: 3,000,000 + 200,000 + 40,000 + 5,000 + 600 + 70 + 8</p>
+                            <p><strong>Answer:</strong> 3,245,678</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 4: Compare Place Values</h4>
+                            <p>In which number does the digit 5 have a greater value: 567,234 or 234,567?</p>
+                            <p><strong>Answer:</strong> 567,234 (5 is in hundred thousands place vs thousands place)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 5: Word Form</h4>
+                            <p>Write 1,234,567 in word form.</p>
+                            <p><strong>Answer:</strong> One million, two hundred thirty-four thousand, five hundred sixty-seven</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Place Value - Quiz',
+                    content: `
+                        <h3>🏆 Place Value Quiz</h3>
+                        <p>Test your place value knowledge</p>
+                        
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>In the number 5,847,239, what digit is in the ten thousands place?</p>
+                            <ul>
+                                <li>A) 4</li>
+                                <li>B) 7</li>
+                                <li>C) 8</li>
+                                <li>D) 5</li>
+                            </ul>
+                            <p><small><em>Answer: A) 4</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 2</h4>
+                            <p>What is the value of 6 in 6,789,123?</p>
+                            <ul>
+                                <li>A) 6</li>
+                                <li>B) 600</li>
+                                <li>C) 6,000</li>
+                                <li>D) 6,000,000</li>
+                            </ul>
+                            <p><small><em>Answer: D) 6,000,000</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 3</h4>
+                            <p>Which number has 7 in the hundreds place?</p>
+                            <ul>
+                                <li>A) 123,456</li>
+                                <li>B) 123,756</li>
+                                <li>C) 127,456</li>
+                                <li>D) 723,456</li>
+                            </ul>
+                            <p><small><em>Answer: B) 123,756</em></small></p>
+                        </div>
+                    `
+                }
+            },
+            'Large Numbers': {
+                notes: {
+                    title: 'Reading & Writing Large Numbers - Study Notes',
+                    content: `
+                        <h3>📊 Reading Large Numbers</h3>
+                        <p>When reading large numbers, group digits in threes from right to left:</p>
+                        <div class="practice-problem">
+                            <p><strong>Example:</strong> 2,847,693</p>
+                            <p>Groups: 2 | 847 | 693</p>
+                            <p>Reads as: "two million, eight hundred forty-seven thousand, six hundred ninety-three"</p>
+                        </div>
+
+                        <h3>✍️ Writing Large Numbers</h3>
+                        <div class="practice-problem">
+                            <p><strong>Steps to write numbers in words:</strong></p>
+                            <ol>
+                                <li>Identify the period names (ones, thousands, millions)</li>
+                                <li>Read each group separately</li>
+                                <li>Add period names between groups</li>
+                                <li>Use "and" only for decimals (not whole numbers)</li>
+                            </ol>
+                        </div>
+
+                        <h3>📋 Comparing Large Numbers</h3>
+                        <div class="practice-problem">
+                            <p><strong>Steps to compare:</strong></p>
+                            <ol>
+                                <li>Compare digits from left to right</li>
+                                <li>Start with the highest place value</li>
+                                <li>If digits are equal, move to the next place</li>
+                                <li>The first different digit determines which is greater</li>
+                            </ol>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Reading & Writing Large Numbers - Video Lesson',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Reading & Writing Large Numbers</h3>
+                            <p>Duration: 15 minutes</p>
+                            <p>This video demonstrates:</p>
+                            <ul>
+                                <li>How to read numbers with millions</li>
+                                <li>Writing numbers in word form</li>
+                                <li>Comparing and ordering large numbers</li>
+                                <li>Common mistakes to avoid</li>
+                            </ul>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Reading & Writing Large Numbers - Practice',
+                    content: `
+                        <h3>🧮 Practice Problems</h3>
+                        
+                        <div class="practice-problem">
+                            <h4>Problem 1: Reading Numbers</h4>
+                            <p>Read this number: 4,562,789</p>
+                            <p><strong>Answer:</strong> Four million, five hundred sixty-two thousand, seven hundred eighty-nine</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 2: Writing Numbers</h4>
+                            <p>Write in numbers: "Seven million, three hundred twenty-one thousand, four hundred fifty-six"</p>
+                            <p><strong>Answer:</strong> 7,321,456</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 3: Comparing</h4>
+                            <p>Which is greater: 3,456,789 or 3,654,789?</p>
+                            <p><strong>Answer:</strong> 3,654,789 (6 > 4 in hundred thousands place)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 4: Ordering</h4>
+                            <p>Order from least to greatest: 2,345,678; 2,354,678; 2,345,687</p>
+                            <p><strong>Answer:</strong> 2,345,678; 2,345,687; 2,354,678</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Reading & Writing Large Numbers - Quiz',
+                    content: `
+                        <h3>🏆 Large Numbers Quiz</h3>
+                        
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>How do you write 5,234,567 in words?</p>
+                            <ul>
+                                <li>A) Five million, two hundred thirty-four thousand, five hundred sixty-seven</li>
+                                <li>B) Five thousand, two hundred thirty-four, five hundred sixty-seven</li>
+                                <li>C) Five billion, two hundred thirty-four thousand, five hundred sixty-seven</li>
+                                <li>D) Five million, two hundred thirty-four, five hundred sixty-seven</li>
+                            </ul>
+                            <p><small><em>Answer: A)</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 2</h4>
+                            <p>Which number is the smallest?</p>
+                            <ul>
+                                <li>A) 1,234,567</li>
+                                <li>B) 1,243,567</li>
+                                <li>C) 1,234,576</li>
+                                <li>D) 1,234,657</li>
+                            </ul>
+                            <p><small><em>Answer: A) 1,234,567</em></small></p>
+                        </div>
+                    `
+                }
+            },
+            'Rounding': {
+                notes: {
+                    title: 'Rounding Numbers - Study Notes',
+                    content: `
+                        <h3>🎯 Rules for Rounding</h3>
+                        <div class="practice-problem">
+                            <p><strong>Basic Rounding Rules:</strong></p>
+                            <ol>
+                                <li>Look at the digit to the right of the place you're rounding to</li>
+                                <li>If it's 5 or greater, round up</li>
+                                <li>If it's less than 5, round down</li>
+                                <li>Replace all digits to the right with zeros</li>
+                            </ol>
+                        </div>
+
+                        <h3>🔢 Rounding to Different Places</h3>
+                        <div class="practice-problem">
+                            <p><strong>Example: 48,673</strong></p>
+                            <ul>
+                                <li>Nearest 10: 48,670</li>
+                                <li>Nearest 100: 48,700</li>
+                                <li>Nearest 1,000: 49,000</li>
+                                <li>Nearest 10,000: 50,000</li>
+                            </ul>
+                        </div>
+
+                        <h3>💡 Why We Round</h3>
+                        <div class="practice-problem">
+                            <p>Rounding helps us:</p>
+                            <ul>
+                                <li>Estimate answers quickly</li>
+                                <li>Make numbers easier to work with</li>
+                                <li>Check if our exact answers are reasonable</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Rounding Numbers - Video Lesson',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Rounding Strategies</h3>
+                            <p>Duration: 10 minutes</p>
+                            <p>Learn about:</p>
+                            <ul>
+                                <li>Step-by-step rounding process</li>
+                                <li>Rounding to different place values</li>
+                                <li>Real-world applications</li>
+                                <li>Common rounding mistakes</li>
+                            </ul>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Rounding Numbers - Practice',
+                    content: `
+                        <h3>🧮 Rounding Practice</h3>
+                        
+                        <div class="practice-problem">
+                            <h4>Problem 1: Round to nearest 10</h4>
+                            <p>Round 67 to the nearest 10.</p>
+                            <p><strong>Answer:</strong> 70</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 2: Round to nearest 100</h4>
+                            <p>Round 1,847 to the nearest 100.</p>
+                            <p><strong>Answer:</strong> 1,800</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 3: Round to nearest 1,000</h4>
+                            <p>Round 23,567 to the nearest 1,000.</p>
+                            <p><strong>Answer:</strong> 24,000</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 4: Multiple Rounding</h4>
+                            <p>Round 156,789 to the nearest 10,000.</p>
+                            <p><strong>Answer:</strong> 160,000</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Rounding Numbers - Quiz',
+                    content: `
+                        <h3>🏆 Rounding Quiz</h3>
+                        
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>Round 67,849 to the nearest hundred.</p>
+                            <ul>
+                                <li>A) 67,800</li>
+                                <li>B) 67,900</li>
+                                <li>C) 68,000</li>
+                                <li>D) 67,000</li>
+                            </ul>
+                            <p><small><em>Answer: B) 67,900</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 2</h4>
+                            <p>What is 45,678 rounded to the nearest thousand?</p>
+                            <ul>
+                                <li>A) 45,000</li>
+                                <li>B) 46,000</li>
+                                <li>C) 40,000</li>
+                                <li>D) 50,000</li>
+                            </ul>
+                            <p><small><em>Answer: B) 46,000</em></small></p>
+                        </div>
+                    `
+                }
+            },
+            'Roman Numerals': {
+                notes: {
+                    title: 'Roman Numerals - Study Notes',
+                    content: `
+                        <h3>🏛️ Roman Numeral Symbols</h3>
+                        <div class="practice-problem">
+                            <p><strong>Basic symbols:</strong></p>
+                            <ul>
+                                <li>I = 1</li>
+                                <li>V = 5</li>
+                                <li>X = 10</li>
+                                <li>L = 50</li>
+                                <li>C = 100</li>
+                                <li>D = 500</li>
+                                <li>M = 1000</li>
+                            </ul>
+                        </div>
+
+                        <h3>📏 Rules for Roman Numerals</h3>
+                        <div class="practice-problem">
+                            <p><strong>Key Rules:</strong></p>
+                            <ol>
+                                <li>When a smaller numeral is after a larger one, add them</li>
+                                <li>When a smaller numeral is before a larger one, subtract it</li>
+                                <li>Only I, X, and C can be subtracted</li>
+                                <li>Never use more than three of the same symbol in a row</li>
+                            </ol>
+                        </div>
+
+                        <h3>🔢 Examples</h3>
+                        <div class="practice-problem">
+                            <p><strong>Common combinations:</strong></p>
+                            <ul>
+                                <li>IV = 4 (5-1)</li>
+                                <li>IX = 9 (10-1)</li>
+                                <li>XIV = 14 (10+5-1)</li>
+                                <li>XL = 40 (50-10)</li>
+                                <li>XC = 90 (100-10)</li>
+                                <li>CD = 400 (500-100)</li>
+                                <li>CM = 900 (1000-100)</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Roman Numerals - Video Lesson',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Understanding Roman Numerals</h3>
+                            <p>Duration: 12 minutes</p>
+                            <p>This lesson covers:</p>
+                            <ul>
+                                <li>Roman numeral symbols and values</li>
+                                <li>Addition and subtraction rules</li>
+                                <li>Converting between Roman and Arabic numerals</li>
+                                <li>Historical context and modern usage</li>
+                            </ul>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Roman Numerals - Practice',
+                    content: `
+                        <h3>🧮 Roman Numeral Practice</h3>
+                        
+                        <div class="practice-problem">
+                            <h4>Problem 1: Convert to Arabic</h4>
+                            <p>What is XXVII in regular numbers?</p>
+                            <p><strong>Answer:</strong> 27 (10+10+5+1+1)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 2: Convert to Roman</h4>
+                            <p>Write 49 in Roman numerals.</p>
+                            <p><strong>Answer:</strong> XLIX (50-10+10-1)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 3: Larger Numbers</h4>
+                            <p>What is MCMLIV in regular numbers?</p>
+                            <p><strong>Answer:</strong> 1954 (1000+900+50+4)</p>
+                        </div>
+
+                        <div class="practice-problem">
+                            <h4>Problem 4: Convert to Roman</h4>
+                            <p>Write 2023 in Roman numerals.</p>
+                            <p><strong>Answer:</strong> MMXXIII</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Roman Numerals - Quiz',
+                    content: `
+                        <h3>🏆 Roman Numerals Quiz</h3>
+                        
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>What is XLV in standard form?</p>
+                            <ul>
+                                <li>A) 35</li>
+                                <li>B) 45</li>
+                                <li>C) 55</li>
+                                <li>D) 65</li>
+                            </ul>
+                            <p><small><em>Answer: B) 45</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 2</h4>
+                            <p>How do you write 90 in Roman numerals?</p>
+                            <ul>
+                                <li>A) LXXXX</li>
+                                <li>B) XC</li>
+                                <li>C) IC</li>
+                                <li>D) IIIC</li>
+                            </ul>
+                            <p><small><em>Answer: B) XC</em></small></p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>Question 3</h4>
+                            <p>What does CD represent?</p>
+                            <ul>
+                                <li>A) 600</li>
+                                <li>B) 400</li>
+                                <li>C) 300</li>
+                                <li>D) 110</li>
+                            </ul>
+                            <p><small><em>Answer: B) 400</em></small></p>
+                        </div>
+                    `
+                }
+            }
+        };
+
+        // Add content for other subtopics similarly
+        const measurementSubtopics = {
+            'Length Weight Volume': {
+                notes: {
+                    title: 'Length, Weight & Volume - Study Notes',
+                    content: `
+                        <h3>📏 Units of Length</h3>
+                        <div class="practice-problem">
+                            <p><strong>Metric Units:</strong></p>
+                            <ul>
+                                <li>Millimeter (mm) - thickness of a coin</li>
+                                <li>Centimeter (cm) - width of a finger</li>
+                                <li>Meter (m) - height of a door</li>
+                                <li>Kilometer (km) - distance between cities</li>
+                            </ul>
+                        </div>
+                        <div class="practice-problem">
+                            <p><strong>Customary Units:</strong></p>
+                            <ul>
+                                <li>Inch (in) - length of a paperclip</li>
+                                <li>Foot (ft) - length of a ruler</li>
+                                <li>Yard (yd) - width of a door</li>
+                                <li>Mile (mi) - distance to school</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Length, Weight & Volume - Video',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Measurement Units</h3>
+                            <p>Duration: 18 minutes</p>
+                            <p>Learn about different units for measuring length, weight, and volume</p>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Length, Weight & Volume - Practice',
+                    content: `
+                        <h3>🧮 Measurement Practice</h3>
+                        <div class="practice-problem">
+                            <h4>Problem 1: Choose the best unit</h4>
+                            <p>What unit would you use to measure the length of a classroom?</p>
+                            <p><strong>Answer:</strong> Meters or feet</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Length, Weight & Volume - Quiz',
+                    content: `
+                        <h3>🏆 Measurement Quiz</h3>
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>Which unit is best for measuring the width of a book?</p>
+                            <ul>
+                                <li>A) Kilometers</li>
+                                <li>B) Centimeters</li>
+                                <li>C) Meters</li>
+                                <li>D) Millimeters</li>
+                            </ul>
+                            <p><small><em>Answer: B) Centimeters</em></small></p>
+                        </div>
+                    `
+                }
+            },
+            'Unit Conversion': {
+                notes: {
+                    title: 'Unit Conversion - Study Notes',
+                    content: `
+                        <h3>🔄 Converting Between Units</h3>
+                        <div class="practice-problem">
+                            <p><strong>Metric Conversions:</strong></p>
+                            <ul>
+                                <li>1 meter = 100 centimeters</li>
+                                <li>1 kilometer = 1000 meters</li>
+                                <li>1 centimeter = 10 millimeters</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                video: {
+                    title: 'Unit Conversion - Video',
+                    content: `
+                        <div class="video-placeholder">
+                            <h3>🎥 Video: Converting Units</h3>
+                            <p>Duration: 14 minutes</p>
+                            <p>Learn step-by-step unit conversion methods</p>
+                            <button style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; margin-top: 1rem;">▶️ Play Video</button>
+                        </div>
+                    `
+                },
+                practice: {
+                    title: 'Unit Conversion - Practice',
+                    content: `
+                        <h3>🧮 Conversion Practice</h3>
+                        <div class="practice-problem">
+                            <h4>Problem 1: Metric Conversion</h4>
+                            <p>Convert 3 meters to centimeters.</p>
+                            <p><strong>Answer:</strong> 300 centimeters</p>
+                        </div>
+                    `
+                },
+                quiz: {
+                    title: 'Unit Conversion - Quiz',
+                    content: `
+                        <h3>🏆 Conversion Quiz</h3>
+                        <div class="quiz-question">
+                            <h4>Question 1</h4>
+                            <p>How many centimeters are in 2 meters?</p>
+                            <ul>
+                                <li>A) 20</li>
+                                <li>B) 200</li>
+                                <li>C) 2000</li>
+                                <li>D) 20000</li>
+                            </ul>
+                            <p><small><em>Answer: B) 200</em></small></p>
+                        </div>
+                    `
+                }
+            }
+        };
+
+        // Merge measurement subtopics with main content
+        Object.assign(subtopicContent, measurementSubtopics);
+
+        // Comprehensive language translations
+        const translations = {
+            en: {
+                'logo': 'BeyondScool',
+                'nav.home': 'Home',
+                'nav.library': 'Library',
+                'nav.quiz': 'Play Quiz',
+                'nav.games': 'Play Games',
+                'hero.title': 'Explore',
+                'hero.subtitle': 'Discover comprehensive learning materials tailored to your needs',
+                'explore.title': 'Explore',
+                'explore.button': 'Explore',
+                'back': '← Back to Explore',
+                'filters.grade': 'Grade',
+                'filters.subject': 'Subject',
+                'filters.exam': 'Exam You Are Preparing For',
+                'filters.board': 'Education Board',
+                'filters.selectGrade': 'Select grade',
+                'filters.selectSubject': 'Select subject',
+                'filters.selectExam': 'Select exam',
+                'filters.selectBoard': 'Select board',
+                'filters.grade1': 'Grade 1',
+                'filters.grade2': 'Grade 2',
+                'filters.grade3': 'Grade 3',
+                'filters.grade4': 'Grade 4',
+                'filters.grade5': 'Grade 5',
+                'filters.mathematics': 'Mathematics',
+                'filters.science': 'Science',
+                'filters.english': 'English',
+                'filters.history': 'History',
+                'filters.finalExam': 'Final Exam',
+                'filters.midtermExam': 'Midterm Exam',
+                'filters.weeklyQuiz': 'Weekly Quiz',
+                'filters.ibBoard': 'IB Board',
+                'filters.cbseBoard': 'CBSE Board',
+                'filters.icseBoard': 'ICSE Board',
+                'filters.stateBoard': 'State Board',
+                'mostViewed.title': 'Our Most Viewed Contents',
+                'mostViewed.grade4Math': 'Grade 4 - Mathematics',
+                'mostViewed.grade4MathDesc': 'Complete math curriculum for Grade 4 students',
+                'mostViewed.grade3Science': 'Grade 3 - Science',
+                'mostViewed.grade3ScienceDesc': 'Interactive science lessons and experiments',
+                'mostViewed.grade5English': 'Grade 5 - English',
+                'mostViewed.grade5EnglishDesc': 'Reading, writing, and grammar exercises',
+                'mostViewed.grade2Math': 'Grade 2 - Mathematics',
+                'mostViewed.grade2MathDesc': 'Foundation math concepts for young learners',
+                'math.title': 'Grade 4 - Mathematics (IB Board)',
+                'math.subtitle': 'Comprehensive math topics with interactive learning',
+                'topics.numbers.title': 'Numbers & Operations',
+                'topics.numbers.placeValue': 'Place Value (6-7 digits)',
+                'topics.numbers.placeValueDesc': 'Understanding place value up to millions',
+                'topics.numbers.largeNumbers': 'Reading & Writing Large Numbers',
+                'topics.numbers.largeNumbersDesc': 'Comparing and ordering large numbers',
+                'topics.numbers.rounding': 'Rounding Numbers',
+                'topics.numbers.roundingDesc': 'Rounding to nearest 10, 100, 1000',
+                'topics.numbers.roman': 'Roman Numerals',
+                'topics.numbers.romanDesc': 'Understanding Roman numeral system'
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        // JavaScript Functions
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.classList.remove('show');
+            
+            const langNames = {
+                'en': '🇺🇸 English',
+                'es': '🇪🇸 Español', 
+                'fr': '🇫🇷 Français',
+                'de': '🇩🇪 Deutsch',
+                'hi': '🇮🇳 हिंदी'
+            };
+            
+            document.querySelector('.language-btn').innerHTML = `🌐 ${langNames[lang].split(' ')[1]}`;
+            updateTranslations();
+        }
+
+        function updateTranslations() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLanguage] && translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+        }
+
+        function showLandingPage() {
+            document.getElementById('landingPage').style.display = 'block';
+            document.getElementById('mathLibrary').classList.remove('show');
+            document.getElementById('subtopicDetail').classList.remove('show');
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            navLinks[0].classList.add('active');
+        }
+
+        function showMathLibrary() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('mathLibrary').classList.add('show');
+            document.getElementById('subtopicDetail').classList.remove('show');
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            navLinks[1].classList.add('active');
+        }
+
+        function showSubtopicDetail() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('mathLibrary').classList.remove('show');
+            document.getElementById('subtopicDetail').classList.add('show');
+        }
+
+        function exploreContent() {
+            const grade = document.getElementById('gradeSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            const exam = document.getElementById('examSelect').value;
+            const board = document.getElementById('boardSelect').value;
+
+            if (grade === 'grade4' && subject === 'mathematics') {
+                showMathLibrary();
+            } else {
+                alert('Content for this combination is coming soon! For now, you can explore Grade 4 Mathematics.');
+            }
+        }
+
+        function openDirectContent(contentType) {
+            if (contentType === 'grade4-math') {
+                showMathLibrary();
+            }
+        }
+
+        function toggleTopic(topicId) {
+            const content = document.getElementById(topicId);
+            const allContents = document.querySelectorAll('.topic-content');
+            
+            allContents.forEach(topic => {
+                if (topic.id !== topicId) {
+                    topic.classList.remove('show');
+                }
+            });
+            
+            content.classList.toggle('show');
+        }
+
+        function openSubtopicDetail(subtopicKey, title, description) {
+            currentSubtopic = {
+                key: subtopicKey,
+                title: title,
+                description: description
+            };
+            
+            document.getElementById('subtopicTitle').textContent = title;
+            document.getElementById('subtopicDescription').textContent = description;
+            
+            showSubtopicDetail();
+        }
+
+        function openModal(type) {
+            const modal = document.getElementById('activityModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            if (currentSubtopic.key && subtopicContent[currentSubtopic.key] && subtopicContent[currentSubtopic.key][type]) {
+                const content = subtopicContent[currentSubtopic.key][type];
+                modalTitle.textContent = content.title;
+                modalBody.innerHTML = content.content;
+            } else {
+                modalTitle.textContent = `${currentSubtopic.title} - ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                modalBody.innerHTML = `
+                    <div class="practice-problem">
+                        <h3>🚧 Content Coming Soon</h3>
+                        <p>The ${type} content for ${currentSubtopic.title} is being prepared and will be available soon.</p>
+                        <p>Please check back later for comprehensive learning materials.</p>
+                    </div>
+                `;
+            }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('activityModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('activityModal');
+            const dropdown = document.getElementById('languageDropdown');
+            
+            if (event.target === modal) {
+                closeModal();
+            }
+            
+            if (!event.target.closest('.language-selector')) {
+                dropdown.classList.remove('show');
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTranslations();
+        });
+    </script>
+</body>
+</html>

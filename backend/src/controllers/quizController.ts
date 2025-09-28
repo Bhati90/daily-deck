@@ -15,6 +15,19 @@ const canTakeQuiz = (lastQuizDate: Date | undefined): boolean => {
     return hours >= 24;
 };
 
+const calculatePoints = (streak: number): { points: number, bonus: number } => {
+    let points = 10; // Base points for completing a quiz
+    let bonus = 0;
+
+    if (streak > 0 && streak % 30 === 0) { // Monthly milestone
+        bonus += 200;
+    } else if (streak > 0 && streak % 7 === 0) { // Weekly milestone
+        bonus += 50;
+    }
+    
+    return { points, bonus };
+};
+
 export const generateQuiz = async (req: any, res: Response) => {
     const { class: studentClass, subjects, difficulty } = req.body;
     const user = await User.findById(req.user._id);
@@ -119,6 +132,10 @@ export const submitQuiz = async (req: any, res: Response) => {
         } else {
             user.streak = 1;
         }
+         const { points, bonus } = calculatePoints(user.streak);
+        user.points += (points + bonus); // Add new points to existing total
+        // --- END OF NEW LOGIC ---
+        
         user.lastQuizTakenAt = now;
         await user.save();
     }
@@ -128,7 +145,8 @@ export const submitQuiz = async (req: any, res: Response) => {
         score,
         total: quiz.questions.length,
         results: quiz,
-        streak: user?.streak
+        streak: user?.streak,
+        points: user?.points ?? 0
     });
 };
 

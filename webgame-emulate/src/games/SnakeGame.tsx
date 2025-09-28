@@ -1,3 +1,5 @@
+// src/games/SnakeGame.tsx
+
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -181,7 +183,8 @@ export const SnakeGame = () => {
   }, [drawGame]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    // CHANGE IS HERE: Replaced 'min-h-screen' with 'h-full'
+    <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white">
       <div className="text-center mb-6">
         <h1 className="text-4xl font-bold mb-2 text-primary">Snake Game</h1>
         <div className="flex justify-center space-x-8 text-lg">

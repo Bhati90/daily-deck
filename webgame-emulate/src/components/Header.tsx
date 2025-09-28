@@ -36,13 +36,13 @@ export const Header = ({ onSearch, onCategorySelect }: HeaderProps) => {
         {/* Logo and Search Row */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            {/* Poki Logo */}
+           <img src = "/log.jpg" alt="logo" style={{height: '50px', width: '50px',borderRadius:'50%'}} />
             <div className="bg-white rounded-2xl p-3 shadow-lg">
-              <h1 className="text-2xl font-bold text-primary">POKI</h1>
+              <h1 className="text-2xl font-bold text-primary">BeyondScool</h1>
             </div>
-            <Button variant="ghost" className="text-white/80 hover:text-white">
+            {/* <Button variant="ghost" className="text-white/80 hover:text-white">
               <Menu className="h-5 w-5" />
-            </Button>
+            </Button> */}
           </div>
 
           {/* Search Bar */}
@@ -58,6 +58,13 @@ export const Header = ({ onSearch, onCategorySelect }: HeaderProps) => {
               />
             </div>
           </form>
+
+          {/* Main Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <a href="#" className="text-white font-semibold hover:text-primary transition-colors">HOME</a>
+            <a href="#" className="text-white font-semibold hover:text-primary transition-colors">Play QUIZ</a>
+            <a href="#" className="text-white font-semibold hover:text-primary transition-colors">LIBRARY</a>
+          </nav>
 
           {/* User Actions */}
           <div className="flex items-center space-x-3">

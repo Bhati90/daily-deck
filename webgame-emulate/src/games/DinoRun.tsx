@@ -94,7 +94,7 @@ export const DinoRun = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white ">
       <h1 className="text-4xl font-bold mb-2 text-primary">Dino Run</h1>
       <div className="mb-4">Score: {score}</div>
       <canvas ref={canvasRef} width="600" height="200" className="bg-gray-800 rounded-lg shadow-xl" />
